@@ -10,7 +10,7 @@ M_IP=10.10.1.100
 C_IP=10.10.10.100
 D_IP=10.10.20.100
 #RABBIT_PASS=secrete
-PASSWORD=fn!xo!ska!
+PASSWORD=PASS
 #ADMIN_TOKEN=ADMIN
 #MAIL=jshan@nm.gist.ac.kr
 

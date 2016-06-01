@@ -1,8 +1,12 @@
 # OpenStack-Installation
 
-This is automated installation scripts for OpenStack Mitaka Release.
+Automated OpenStack Services Installation Scripts focusing on OpenStack Mitaka Release.
+
+## Requirement
+
+Ubuntu 14.04 LTS
 
 ## How to Use
 $ vim keystone.sh 
-Modify parameters such as M_IP, C_IP, D_IP and passwords, and run it.
+Modify parameters such as Interfaces (ex., Management, Control and Data) and passwords, and run it.
 $ ./keystone.sh
