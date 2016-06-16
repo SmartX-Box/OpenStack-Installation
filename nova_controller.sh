@@ -74,7 +74,7 @@ rpc_backend = rabbit\n\
 auth_strategy = keystone\n\
 \n\
 [api_database]\n\
-connection = mysql+pymysql:\/\/nova_api:$PASSWORD@$C_IP\/nova_api\n\
+connection = mysql+pymysql:\/\/nova:$PASSWORD@$C_IP\/nova_api\n\
 \n\
 [database]\n\
 connection = mysql+pymysql:\/\/nova:$PASSWORD@$C_IP\/nova\n\
