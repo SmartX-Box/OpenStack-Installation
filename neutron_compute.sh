@@ -85,6 +85,20 @@ sed -i "s/#flat_networks = \*/flat_networks = external/g" /etc/neutron/plugins/m
 sed -i "s/#firewall_driver = <None>/firewall_driver = iptables_hybrid\n\
 enable_ipset = True/g" /etc/neutron/plugins/ml2/ml2_conf.ini
 
+#.In the openvswitch_agent.ini file, configure the Open vSwitch agent:
+sed -i "s/#local_ip = <None>/local_ip = $D_IP/g" /etc/neutron/plugins/ml2/openvswitch_agent.ini
+
+sed -i "s/#tunnel_types =/tunnel_types = vxlan\n\
+l2_population = True/g" /etc/neutron/plugins/ml2/openvswitch_agent.ini
+
+sed -i "s/#firewall_driver = <None>/firewall_driver = iptables_hybrid\n\
+enable_security_group = true/g" /etc/neutron/plugins/ml2/openvswitch_agent.ini
+
+sed -i "s/#arp_responder = false/arp_responder = True/g" /etc/neutron/plugins/ml2/openvswitch_agent.ini
+
+sed -i "s/#enable_distributed_routing = false/enable_distributed_routing = True/g" /etc/neutron/plugins/ml2/openvswitch_agent.ini
+
+
 
 #Restart the Neutron service:
 service nova-compute restart
