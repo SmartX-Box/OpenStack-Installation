@@ -73,6 +73,6 @@ fi
 #2.Restart the Compute service:
 service nova-compute restart
 
-
-
+#Permission 
+chown -R nova:nova nova
 

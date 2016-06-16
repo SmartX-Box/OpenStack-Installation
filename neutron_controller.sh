@@ -15,6 +15,14 @@ PASSWORD=PASS
 #MAIL=jshan@nm.gist.ac.kr
 
 
+sed -i "/#kernel.domainname = example.com/a\
+net.ipv4.ip_forward=1\n\
+net.ipv4.conf.all.rp_filter=0\n\
+net.ipv4.conf.default.rp_filter=0" /etc/sysctl.conf
+
+
+
+
 
 #1.To create the database, complete these steps:
 cat << EOF | mysql -uroot -p$PASSWORD

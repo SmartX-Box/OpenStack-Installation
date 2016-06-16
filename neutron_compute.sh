@@ -17,6 +17,17 @@ PASSWORD=PASS
 #MAIL=jshan@nm.gist.ac.kr
 
 
+
+sed -i "/#kernel.domainname = example.com/a\
+net.ipv4.ip_forward=1\n\
+net.ipv4.conf.all.rp_filter=0\n\
+net.ipv4.conf.default.rp_filter=0\n\
+net.bridge.bridge-nf-call-iptables=1\n\
+net.bridge.bridge-nf-call-ip6tables=1" /etc/sysctl.conf
+
+
+
+
 # Install and Configure Neutron Compute Node
 
 #Install and configure components
