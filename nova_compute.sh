@@ -6,13 +6,13 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-M_IP=10.10.1.112
-C_IP=10.10.10.112
-D_IP=10.10.20.112
-CTR_M_IP=10.10.1.111
-CTR_C_IP=10.10.10.111
+M_IP=210.125.84.51
+C_IP=172.20.84.51
+D_IP=172.30.84.51
+CTR_M_IP=210.125.84.50
+CTR_C_IP=172.20.84.50
 #RABBIT_PASS=secrete
-PASSWORD=PASS
+PASSWORD=fn!xo!ska!
 #ADMIN_TOKEN=ADMIN
 #MAIL=jshan@nm.gist.ac.kr
 
@@ -74,5 +74,5 @@ fi
 service nova-compute restart
 
 #Permission 
-chown -R nova:nova nova
+chown -R nova:nova /var/lib/nova
 
