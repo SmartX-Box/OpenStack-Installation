@@ -6,9 +6,9 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-M_IP=10.10.1.100
-C_IP=10.10.10.100
-D_IP=10.10.20.100
+M_IP=10.10.1.107
+C_IP=10.10.10.107
+D_IP=10.10.20.107
 #RABBIT_PASS=secrete
 PASSWORD=PASS
 #ADMIN_TOKEN=ADMIN
@@ -65,7 +65,8 @@ allow_overlapping_ips = True\n\
 rpc_backend = rabbit\n\
 auth_strategy = keystone\n\
 notify_nova_on_port_status_changes = True\n\
-notify_nova_on_port_data_changes = True/g" /etc/neutron/neutron.conf
+notify_nova_on_port_data_changes = True\n\
+router_distributed = True/g" /etc/neutron/neutron.conf
 
 sed -i "s/#rabbit_host = localhost/rabbit_host = $C_IP\n\
 rabbit_userid = openstack\n\
@@ -115,11 +116,16 @@ l2_population = True/g" /etc/neutron/plugins/ml2/openvswitch_agent.ini
 sed -i "s/#firewall_driver = <None>/firewall_driver = iptables_hybrid\n\
 enable_security_group = true/g" /etc/neutron/plugins/ml2/openvswitch_agent.ini
 
+sed -i "s/#arp_responder = false/arp_responder = True/g" /etc/neutron/plugins/ml2/openvswitch_agent.ini
+
+sed -i "s/#enable_distributed_routing = false/enable_distributed_routing = True/g" /etc/neutron/plugins/ml2/openvswitch_agent.ini
 
 #.In the l3_agent.ini file, configure the L3 agent:
 sed -i "s/#interface_driver = <None>/interface_driver = neutron.agent.linux.interface.OVSInterfaceDriver/g" /etc/neutron/l3_agent.ini
 
 sed -i "s/#external_network_bridge = br-ex/external_network_bridge = br-ex/g" /etc/neutron/l3_agent.ini
+
+sed -i "s/#agent_mode = legacy/agent_mode = dvr_snat/g" /etc/neutron/l3_agent.ini
 
 
 #.In the dhcp_agent.ini file, configure the DHCP agent:
@@ -160,6 +166,9 @@ metadata_proxy_shared_secret = METADATA_SECRET/g" /etc/nova/nova.conf
 
 
 #Finalize installation
+su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
+  --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
+
 
 #Restart the Compute service:
 service nova-api restart

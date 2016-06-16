@@ -6,9 +6,9 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-M_IP=10.10.1.100
-C_IP=10.10.10.100
-D_IP=10.10.20.100
+M_IP=10.10.1.107
+C_IP=10.10.10.107
+D_IP=10.10.20.107
 #RABBIT_PASS=secrete
 PASSWORD=PASS
 #ADMIN_TOKEN=ADMIN

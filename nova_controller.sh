@@ -6,9 +6,9 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-M_IP=10.10.1.100
-C_IP=10.10.10.100
-D_IP=10.10.20.100
+M_IP=10.10.1.107
+C_IP=10.10.10.107
+D_IP=10.10.20.107
 #RABBIT_PASS=secrete
 PASSWORD=PASS
 #ADMIN_TOKEN=ADMIN
@@ -66,7 +66,7 @@ sudo apt-get install -y nova-api nova-conductor nova-consoleauth \
   nova-novncproxy nova-scheduler
 
 #2.Edit the /etc/nova/nova.conf file and complete the following actions:
-sed -i "s/enabled_apis=ec2,osapi_compute,metadata/enabled_apis=osapi_compute,metadata\n\
+sed -i "s/enabled_apis=ec2,osapi_compute,metadata/enabled_apis=ec2,osapi_compute,metadata\n\
 my_ip = $C_IP\n\
 use_neutron = True \n\
 firewall_driver = nova.virt.firewall.NoopFirewallDriver\n\
