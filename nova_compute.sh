@@ -6,11 +6,11 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-M_IP=10.10.1.106
-C_IP=10.10.10.106
-D_IP=10.10.20.106
-CTR_M_IP=10.10.1.107
-CTR_C_IP=10.10.10.107
+M_IP=10.10.1.112
+C_IP=10.10.10.112
+D_IP=10.10.20.112
+CTR_M_IP=10.10.1.111
+CTR_C_IP=10.10.10.111
 #RABBIT_PASS=secrete
 PASSWORD=PASS
 #ADMIN_TOKEN=ADMIN
@@ -64,7 +64,7 @@ lock_path = \/var\/lib\/nova\/tmp/g" /etc/nova/nova.conf
 
 #1.Determine whether your compute node supports hardware acceleration for virtual machines:
 NUM=`egrep -c '(vmx|svm)' /proc/cpuinfo`
-if [ $NUM = 4 ]
+if [ $NUM = 0 ]
 then
  echo "here"
  sed -i "s/virt_type=kvm/virt_type=qemu/g" /etc/nova/nova-compute.conf
