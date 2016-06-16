@@ -6,11 +6,11 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-M_IP=10.10.1.106
-C_IP=10.10.10.106
-D_IP=10.10.20.106
-CTR_M_IP=10.10.1.107
-CTR_C_IP=10.10.10.107
+M_IP=10.10.1.112
+C_IP=10.10.10.112
+D_IP=10.10.20.112
+CTR_M_IP=10.10.1.111
+CTR_C_IP=10.10.10.111
 #RABBIT_PASS=secrete
 PASSWORD=PASS
 #ADMIN_TOKEN=ADMIN
@@ -22,7 +22,7 @@ PASSWORD=PASS
 #Install and configure components
 
 #1.Install the packages:
-sudo apt-get install -y neutron-plugin-openvswitch-agent neutron-l3-agent
+sudo apt-get install -y neutron-plugin-ml2 neutron-plugin-openvswitch-agent neutron-l3-agent
 
 
 #•Edit the /etc/neutron/neutron.conf file and complete the following actions:
@@ -45,8 +45,8 @@ password = $PASSWORD/g" /etc/neutron/neutron.conf
 #•Edit the /etc/nova/nova.conf file and complete the following actions:
 #◦In the [neutron] section, configure access parameters:
 sed -i "s/\[oslo_messaging_rabbit\]/[neutron]\n\
-url = http:\/\/$C_IP:9696\n\
-auth_url = http:\/\/$C_IP:35357\n\
+url = http:\/\/$CTR_C_IP:9696\n\
+auth_url = http:\/\/$CTR_C_IP:35357\n\
 auth_type = password\n\
 project_domain_name = default\n\
 user_domain_name = default\n\
