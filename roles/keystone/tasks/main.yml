@@ -13,21 +13,73 @@
 - name: Install Python-OpenStackClient
   apt: name=python-openstackclient
 
+# Install & Configure MySQL
 - name: Set MariaDB root password
-  debconf: name='mariadb-server' question='mysql-server/root_password' vtype='password' value='{{mariadb_root_pass|quote}}'
+  debconf: name='mariadb-server' question='mysql-server/root_password' vtype='password' value='{{mysql_root_password|quote}}'
   register: setdbrootpw
 
 - name: Confirm MariaDB root password
-  debconf: name'mariadb-server' question='mysql-server/root_password_again' vtype='password' value='{{mariadb_root_pass|quote}}'
+  debconf: name'mariadb-server' question='mysql-server/root_password_again' vtype='password' value='{{mysql_root_password|quote}}'
   when: setdbrootpw|success
 
-- name: Install mariadb-server & pymysql
-  apt: name=mariadb-server state=present
-  apt: name=python-pymysql state=present
+- name: Install MySQL(MariaDB) Packages
+  apt: name={{item}} state=present
+  with_items:
+    - mariadb-server
+    - python-pymysql
   register: installdb
 
 - name: Copy mysqld_openstack.cnf
   when: installdb|success
-  template: src=mysqld_openstack.cnf.j2 dest=/etc/mysql/conf.d/mysqld_openstack.cnf
+  template: src=mysqld_openstack.cnf.j2 dest=/etc/mysql/conf.d/mysqld_openstack.cnf owner=root group=root
   notify:
-    - Reload Mysqld
+    - Reload Mysql
+
+# mysql_secure_installation
+- name: Sets mysql root password
+  mysql_user: user=root password='{{mysql_root_password}}' host=localhost
+
+- name: Remove MySQL Anonymous Users for "{{ansible_hostname}}"
+  mysql_user: user="" host="{{ansible_hostname}}" state="absent"
+
+- name: Remove MySQL anonymous Users for localhost
+  mysql_user: user="" state="absent"
+
+- name: Change root user password on first run
+  mysql_user: login_user=root
+              login_password=''
+              name=root
+              password={{ mysql_root_password }}
+              priv=*.*:ALL,GRANT
+              host={{ item }}
+  with_items:
+    - "{{ansible_hostname}}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: Removes the MySQL test database
+  mysql_db: db=test state=absent
+
+
+# Install & Configure MongoDB
+- name: Install MongoDB Packages
+  apt: name={{item}} state=installed
+  with_items:
+    - mongodb-server
+    - mongodb-clients
+    - python-pymongo
+
+- name: Copy MongoDB Configuration file
+  template: src=mongodb.conf.j2 dest=/etc/mongodb.conf owner=root group=root
+  notify: Reload MongoDB
+
+# Install & Configure RabbitMQ
+- name: Install RabbitMQ
+  apt: name=rabbitmq-server
+
+- name: Add user openstack
+  rabbit_user: user=openstack
+               password={{rabbit_password}}
+               permissions=[{vhost='/', configure_priv='.*', read_priv='.*', write_priv='.*'}]
+               state=present

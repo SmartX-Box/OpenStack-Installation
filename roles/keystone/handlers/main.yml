@@ -1,0 +1,6 @@
+---
+- name: Reload Mysql
+  service: name=mysql state=reloaded
+
+- name: Reload MongoDB
+  service: name=mongodb state:reloaded
