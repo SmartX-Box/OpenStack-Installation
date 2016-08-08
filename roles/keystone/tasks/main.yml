@@ -1,0 +1,33 @@
+---
+- name: Add Mitaka PPA
+  apt_repository: repo='cloud-archive:mitaka' state=present
+  register: mitakappa
+
+- name: Update & Upgrade apt
+  when: mitakappa|success
+  apt: upgrade=yes update_cache=yes
+
+- name: Install software-properties-common
+  apt: name=software-properties-common state=present
+
+- name: Install Python-OpenStackClient
+  apt: name=python-openstackclient
+
+- name: Set MariaDB root password
+  debconf: name='mariadb-server' question='mysql-server/root_password' vtype='password' value='{{mariadb_root_pass|quote}}'
+  register: setdbrootpw
+
+- name: Confirm MariaDB root password
+  debconf: name'mariadb-server' question='mysql-server/root_password_again' vtype='password' value='{{mariadb_root_pass|quote}}'
+  when: setdbrootpw|success
+
+- name: Install mariadb-server & pymysql
+  apt: name=mariadb-server state=present
+  apt: name=python-pymysql state=present
+  register: installdb
+
+- name: Copy mysqld_openstack.cnf
+  when: installdb|success
+  template: src=mysqld_openstack.cnf.j2 dest=/etc/mysql/conf.d/mysqld_openstack.cnf
+  notify:
+    - Reload Mysqld
