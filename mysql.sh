@@ -6,9 +6,9 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-M_IP=10.10.1.107
-C_IP=10.10.10.107
-D_IP=10.10.20.107
+M_IP=192.168.60.100
+C_IP=192.168.61.100
+D_IP=192.168.62.100
 #RABBIT_PASS=secrete
 PASSWORD=PASS
 #ADMIN_TOKEN=ADMIN
@@ -28,6 +28,7 @@ echo "[mysqld]" >> /etc/mysql/conf.d/mysqld_openstack.cnf
 echo "bind-address = $C_IP" >> /etc/mysql/conf.d/mysqld_openstack.cnf
 echo "default-storage-engine = innodb" >> /etc/mysql/conf.d/mysqld_openstack.cnf
 echo "innodb_file_per_table" >> /etc/mysql/conf.d/mysqld_openstack.cnf
+echo "max_connections = 4096" >> /etc/mysql/conf.d/mysqld_openstack.cnf
 echo "collation-server = utf8_general_ci" >> /etc/mysql/conf.d/mysqld_openstack.cnf
 #echo "init-connect = 'SET NAMES utf8'" >> /etc/mysql/conf.d/mysqld_openstack.cnf
 echo "character-set-server = utf8" >> /etc/mysql/conf.d/mysqld_openstack.cnf
